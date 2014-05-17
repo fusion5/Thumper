@@ -61,9 +61,9 @@ class Consumer extends BaseConsumer
     public function processMessage($msg)
     {
         try {
-            call_user_func($this->callback, $msg->body);
-            $msg->delivery_info['channel']
-                ->basic_ack($msg->delivery_info['delivery_tag']);
+            call_user_func($this->callback, $msg);
+            // $msg->delivery_info['channel'];
+            //     ->basic_ack($msg->delivery_info['delivery_tag']);
             $this->consumed++;
             $this->maybeStopConsumer($msg);
         } catch (Exception $e) {
