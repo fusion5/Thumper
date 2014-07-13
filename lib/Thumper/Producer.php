@@ -53,16 +53,17 @@ class Producer extends BaseAmqp
             $this->ch->exchange_declare(
                 $this->exchangeOptions['name'],
                 $this->exchangeOptions['type'],
-                false,
-                true,
-                false
+                $this->exchangeOptions['passive'],
+                $this->exchangeOptions['durable'],
+                $this->exchangeOptions['auto_delete']
             );
             $this->exchangeReady = true;
         }
 
         $msg = new AMQPMessage(
             $msgBody,
-            array('content_type' => 'text/plain', 'delivery_mode' => 2)
+            array('content_type' => 'text/plain', 'delivery_mode'
+              => $this->exchangeOptions['durable']?2:1)
         );
         $this->ch->basic_publish(
             $msg,
